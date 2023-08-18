@@ -1,0 +1,44 @@
+<style>
+    td {vertical-align: top;}
+</style>
+
+<h1>New user</h1>
+<form action="{{ url_for('users') }}" method="post">
+    <table>
+        <tr style="margin-bottom: 10px;">
+            <label>
+                <td>Nickname</td>
+                <td>
+                    <input type="text" name="name" value="{{ user.name }}">
+                    <div>
+                        {% if errors['name'] %}
+                            {{ errors['name'] }}
+                        {% endif %}
+                    </div>
+                </td>
+            </label>
+        </tr>
+        <tr style="margin-bottom: 10px;">
+                <label>
+                    <td>Email</td>
+                    <td>
+                        <input type="text" required name="email" value="{{ user.email }}">
+                        <div>
+                            {% if errors['email'] %}
+                                {{ errors['email'] }}
+                            {% endif %}
+                        </div>
+                    </td>
+                </label>
+        </tr>
+        <tr style="margin-bottom: 10px;">
+            <label>
+                <td>
+                    <input type="checkbox" name="kek" {{ 'checked' if user.kek == "1" }} value="1">
+                    kek
+                </td>
+            </label>
+        </tr>
+    </table>
+    <input type="submit" value="Submit">
+</form>

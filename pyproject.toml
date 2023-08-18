@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "hexlet-web-test-1"
+version = "0.1.0"
+description = ""
+authors = ["Konstantin Faraktinov <frktnv@protonmail.com>"]
+readme = "README.md"
+packages = [{include = "hexlet_web_test_1"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+flask = "^2.3.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
