@@ -16,6 +16,8 @@ def validate_user(user):
     errors = {}
     if not user['name']:
         errors['name'] = "Can't be blank"
+    if len(user['name']) < 5:
+        errors['name'] = "Nickname should be greater than 4 chars"
     if not user['email']:
         errors['email'] = "Can't be blank"
 

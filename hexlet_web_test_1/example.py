@@ -71,6 +71,10 @@ def users_post():
 def user_page(id):
     users_list = load_users('users.json')
     selected_users = [user for user in users_list if user['id'] == id]
+
+    if selected_users == []:
+        return 'Page not found. No such user', 404
+
     return render_template(
         'users/user-page.html',
         user=selected_users[0]
