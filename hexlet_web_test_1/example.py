@@ -75,7 +75,7 @@ def users_new():
     # Checking if user is authorized. Redirecting to the login page if not:
     if session.get('email') is None:
         return redirect(url_for('login'))
-   
+
     user = {'name': '',
             'email': '',
             }
@@ -88,7 +88,7 @@ def users_new():
 
 
 @app.post('/users/')
-def users_post():       
+def users_post():
     # Checking if user is authorized. Redirecting to the login page if not:
     if session.get('email') is None:
         return redirect(url_for('login'))
@@ -108,14 +108,12 @@ def users_post():
     user['id'] = str(len(users_list) + 1)
     users_list.append(user)
 
-#    with open('users.json', 'w') as file:
-#        json.dump(users_list, file, indent=1)
-
     response = make_response(redirect(url_for('users'), code=302))
     response.set_cookie('users', json.dumps(users_list))
     flash('User successfully created! You are awesome!', 'success')
 
     return response
+
 
 @app.route('/users/<id>')
 def user_page(id):
@@ -136,7 +134,7 @@ def user_page(id):
 
 
 @app.route('/users/<id>/edit')
-def edit_user(id): 
+def edit_user(id):
     # Checking if user is authorized. Redirecting to the login page if not:
     if session.get('email') is None:
         return redirect(url_for('login'))
@@ -167,17 +165,11 @@ def user_patch(id):
             user=new_data,
             errors=errors,
         ), 422
-    
 
     new_data['id'] = id
     new_data['kek'] = new_data.get('kek', '0')
-
     users_list = load_users()
     users_list[int(id) - 1] = new_data
-
-#    with open('users.json', 'w') as file:
-#        json.dump(users_list, file, indent=1)
-
     response = make_response(redirect(url_for('users'), code=302))
     response.set_cookie('users', json.dumps(users_list))
 
@@ -201,4 +193,3 @@ def delete_user(id):
     response.set_cookie('users', json.dumps(users_list))
     flash('User successfully deleted!', 'success')
     return response
-
