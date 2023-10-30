@@ -1,0 +1,23 @@
+<style>
+    td {vertical-align: top;}
+</style>
+
+<h1>Login</h1>
+<form action="{{ url_for('new_login') }}" method="post">
+    <table>
+        <tr style="margin-bottom: 10px;">
+            <label>
+                <td>Email</td>
+                <td>
+                    <input type="text" name="email" value="{{ session['email'] }}">
+                    <div>
+                        {% if errors %}
+                            {{ errors }}
+                        {% endif %}
+                    </div>
+                </td>
+            </label>
+        </tr>
+    </table>
+    <input type="submit" value="Submit">
+</form>

@@ -7,6 +7,7 @@ from flask import (
         flash,
         get_flashed_messages,
         make_response,
+        session,
 )
 import json
 from hexlet_web_test_1.users_functions import validate_user
@@ -22,27 +23,59 @@ def load_users():
 
 @app.route('/')
 def hello_world():
-    url_for('users')
+    # Checking if user is authorized. Redirecting to the login page if not:
+    if session.get('email') is None:
+        return redirect(url_for('login'))
+
     return render_template(
         'index.html'
     )
 
 
+@app.get('/login')
+def login():
+    return render_template('login.html', email='', errors={})
+
+
+@app.post('/login/new')
+def new_login():
+    user_info = request.form.to_dict()
+    user_email = user_info['email']
+    session['email'] = user_email
+    return redirect(url_for('users'), code=302)
+
+
+@app.post('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('users'), code=302)
+
+
 @app.route('/users/')
 def users():
+    # Checking if user is authorized. Redirecting to the login page if not:
+    if session.get('email') is None:
+        return redirect(url_for('login'))
+
+    login_email = session.get('email')
     messages = get_flashed_messages()
     users_list = load_users()
     existing_users = [user for user in users_list if user]
-    response = make_response( render_template(
+    response = make_response(render_template(
         'users/index.html',
         users=existing_users,
-        messages=messages
+        messages=messages,
+        login_email=login_email
     ))
     return response
 
 
 @app.route('/users/create-new')
 def users_new():
+    # Checking if user is authorized. Redirecting to the login page if not:
+    if session.get('email') is None:
+        return redirect(url_for('login'))
+   
     user = {'name': '',
             'email': '',
             }
@@ -55,7 +88,11 @@ def users_new():
 
 
 @app.post('/users/')
-def users_post():
+def users_post():       
+    # Checking if user is authorized. Redirecting to the login page if not:
+    if session.get('email') is None:
+        return redirect(url_for('login'))
+
     user = request.form.to_dict()
     user['kek'] = user.get('kek', '0')
     errors = validate_user(user)
@@ -82,6 +119,10 @@ def users_post():
 
 @app.route('/users/<id>')
 def user_page(id):
+    # Checking if user is authorized. Redirecting to the login page if not:
+    if session.get('email') is None:
+        return redirect(url_for('login'))
+
     users_list = load_users()
     selected_users = [user for user in users_list if user.get('id') == id]
 
@@ -95,7 +136,11 @@ def user_page(id):
 
 
 @app.route('/users/<id>/edit')
-def edit_user(id):
+def edit_user(id): 
+    # Checking if user is authorized. Redirecting to the login page if not:
+    if session.get('email') is None:
+        return redirect(url_for('login'))
+
     users_list = load_users()
     user = next(filter(lambda user: user.get('id') == str(id), users_list))
     errors = {}
@@ -109,6 +154,10 @@ def edit_user(id):
 
 @app.post('/users/<id>/patch')
 def user_patch(id):
+    # Checking if user is authorized. Redirecting to the login page if not:
+    if session.get('email') is None:
+        return redirect(url_for('login'))
+
     new_data = request.form.to_dict()
     errors = validate_user(new_data)
 
@@ -138,6 +187,10 @@ def user_patch(id):
 
 @app.post('/users/<id>/delete')
 def delete_user(id):
+    # Checking if user is authorized. Redirecting to the login page if not:
+    if session.get('email') is None:
+        return redirect(url_for('login'))
+
     users_list = load_users()
     users_list[int(id) - 1] = {}
 

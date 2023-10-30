@@ -28,6 +28,16 @@
 {% endif %}
 
 <h1>Users</h1>
+<table>
+	<tr style="vertical-align: baseline;">
+		<td>{{ login_email }}</td>
+		<td>
+			<form action={{ url_for("logout") }} method="post">
+				<input type="submit" value="Logout">
+		</form>
+		</td>
+	</tr>
+</table>
 <p>
     <a href="{{ url_for('users_new')}}">[new user]</a>
 </p>
